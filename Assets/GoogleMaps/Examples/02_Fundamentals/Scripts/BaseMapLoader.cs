@@ -89,7 +89,7 @@ namespace Google.Maps.Examples {
     /// In this example, the map setup and loading are done as soon as the loader becomes active in
     /// the scene.
     /// </summary>
-    void Start() {
+    public void Create() {
       InitFloatingOrigin();
       InitStylingOptions();
       InitEventListeners();
@@ -101,6 +101,12 @@ namespace Google.Maps.Examples {
         LoadMap();
       }
     }
+
+    public void SetPos(float[] coords)
+        {
+            LatLng = new LatLng(coords[0], coords[1]);
+
+        }
 
     void OnApplicationQuit() {
       HasQuit = true;

@@ -1,0 +1,4 @@
+newmtl Google/Maps/Shaders/BaseMap Color
+Kd 0.5 0.7 0.5
+illum 2
+
