@@ -25,7 +25,7 @@ namespace Scripts
         public UnityEngine.Material modeledMaterial;
         public UnityEngine.Material extrudedMaterial;
         private bool isLoaded = false;
-        public Slider slider;
+        public GameObject togglePrefab;
 
         /// <summary>
         /// Use <see cref="MapsService"/> to load geometry.
@@ -60,20 +60,34 @@ namespace Scripts
             // The Map is loaded - you can start/resume gameplay from that point.
             // The new geometry is added under the GameObject that has MapsService as a component.
             Debug.Log(transform);
-            List<String> names = new List<String>();
+            List<Transform> ExtrudedBuildings = new List<Transform>();
+            GameObject scrollView = GameObject.Find("Building Scroll View/Viewport/Content");
             foreach (Transform child in transform)
             {
                 Debug.Log(child);
                 if (child.GetComponent<Google.Maps.Unity.ExtrudedStructureComponent>() != null)
                 {
                     child.transform.localScale = new Vector3(2, 2, 2);
-                    names.Add(child.GetComponent<Google.Maps.Unity.ExtrudedStructureComponent>().GetMapFeature().MapFeatureMetadata.Name);
+                    ExtrudedBuildings.Add(child);
                 }
             }
 
-            foreach (String name in names)
+            int count = 0;
+            scrollView.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ExtrudedBuildings.Count * 21);
+            foreach (Transform building in ExtrudedBuildings)
             {
-                Debug.Log("Building Name: " + name);
+                count++;
+                GameObject addedChild = (GameObject)Instantiate(togglePrefab, scrollView.transform);
+                addedChild.GetComponent<Transform>().position = new Vector3(110, count * 20, 0);
+
+                Text text = addedChild.GetComponentInChildren<Text>();
+                text.text = building.GetComponent<Google.Maps.Unity.ExtrudedStructureComponent>().GetMapFeature().MapFeatureMetadata.Name;
+
+                Toggle toggle = addedChild.GetComponent<Toggle>();
+                toggle.onValueChanged.AddListener((bool toggled) =>
+                {
+                    building.GetComponent<MeshRenderer>().enabled = !building.GetComponent<MeshRenderer>().enabled;
+                });
             }
         }
 
@@ -81,7 +95,7 @@ namespace Scripts
         {
             if (isLoaded)
             {
-                float value = slider.value;
+                float value = GameObject.Find("SizeSlider").GetComponent<Slider>().value;
                 foreach (Transform child in transform)
                 {
                     Debug.Log(child);

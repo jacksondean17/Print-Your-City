@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MouseLookAt : MonoBehaviour {
-    private bool locked = false;
+    protected bool locked = false;
     private bool lastState = false;
     // Start is called before the first frame update
     void Start () {
@@ -19,7 +20,12 @@ public class MouseLookAt : MonoBehaviour {
         }
         if (!locked)
         {
+            GameObject.Find("SizeSlider").GetComponent<Slider>().enabled = false;
             Look();
+        }
+        else
+        {
+            GameObject.Find("SizeSlider").GetComponent<Slider>().enabled = true;
         }
         lastState = currentState;
     }

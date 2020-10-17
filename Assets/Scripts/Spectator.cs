@@ -13,7 +13,6 @@ public class Spectator : MonoBehaviour {
   
  // Update is called once per frame
  void Update () {
- 
  //press shift to move faster
  if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
  {
